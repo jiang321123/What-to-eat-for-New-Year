@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>今天吃什么</title>
+    <style>
+      html {
+        font-size: 16px;
+      }
+      body {
+        margin: 0;
+      }
+      main {
+        height: 844px;
+        width: 390px;
+        margin: 0 auto;
+        position: relative;
+        background-color: #ff2121;
+      }
+      @media (max-width: 758px) {
+        main {
+          height: 100vh;
+          width: 100vw;
+          position: relative;
+        }
+      }
+
+      main .bg {
+        margin-top: -32px;
+      }
+      main .title {
+        text-align: center;
+        font-weight: 500;
+      }
+      .btn-wrap {
+        display: block;
+        border: none;
+        width: 120px;
+        border-radius: 18px;
+        position: absolute;
+        bottom: 10rem;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+      .btn {
+        background-color: #f6b760;
+        cursor: pointer;
+        border: none;
+        height: 36px;
+        width: 120px;
+        border-radius: 18px;
+        font-size: #fff;
+        transition: all 0.1s;
+        font-size: 1rem;
+      }
+      .btn:active {
+        background-color: #f6c860;
+      }
+      .btn-1 {
+        display: block;
+        margin-top: 8px;
+        color: #a99999;
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        display: none;
+      }
+      .btn-1:active {
+        color: #b2a1a1;
+      }
+      .modal {
+        box-sizing: border-box;
+        width: 256px;
+        height: 512px;
+        min-height: 512px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        padding: 16px;
+        border-radius: 8px;
+        background-color: #fff;
+      }
+      .modal .list {
+        height: calc(100% - 84px);
+        overflow: auto;
+      }
+      .modal .list .item,
+      .modal .handle {
+        display: flex;
+      }
+      .modal .handle {
+        font-weight: 600;
+      }
+      .modal .list .left,
+      .modal .handle .left {
+        line-height: 28px;
+        width: 128px;
+        height: 28px;
+        text-align: center;
+      }
+      .modal .list .right,
+      .modal .handle .right {
+        line-height: 28px;
+        width: 128px;
+        height: 28px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .modal-btn {
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 96px;
+        bottom: 16px;
+        margin: auto;
+      }
+      .modal-btn input {
+        width: 86px;
+        outline: none;
+        margin-bottom: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img class="bg" src="./img/bg.png" alt="bg" width="100%" />
+      <h2 class="title" id="title">今天吃什么？</h2>
+      <div class="btn-wrap">
+        <button class="btn" id="btn">开始</button>
+        <span class="btn-1">能吃写什么</span>
+      </div>
+    </main>
+    <div class="modal" hidden>
+      <div class="handle">
+        <span class="left">有什么</span>
+        <span class="right">操作</span>
+      </div>
+      <div class="list">
+        <div class="item">
+          <span class="left">饺子</span>
+          <span class="right">删除</span>
+        </div>
+      </div>
+      <div class="modal-btn">
+        <input type="text" />
+        <button>添加</button>
+        <button>关闭</button>
+      </div>
+    </div>
+    <script>
+      const $btn = document.getElementById('btn')
+      const $title = document.getElementById('title')
+      const arr = [
+        '廖排骨',
+        '侃膳斋棒棒鸡',
+        '爱烤手撕烤兔',
+        '冷锅串串',
+        '红喜兔头',
+        '鱼香肉丝',
+        '宫保鸡丁',
+        '回锅肉',
+        '盐煎肉',
+        '麻婆豆腐',
+        '夫妻肺片',
+        '蒜泥白肉',
+        '冷吃兔',
+        '牛肉干',
+        '干锅',
+        '烤鱼',
+        '樟茶鸭子',
+        '山城辣子鸡',
+        '凉茶串串香',
+        '潮辣火锅',
+        '水煮肉片',
+        '毛血旺',
+        '羊田粉条',
+        '灯影牛肉',
+        '烤乳猪',
+        '清蒸东星斑',
+        '烧鹅',
+        '白切鸡',
+        '红烧乳鸽',
+        '蜜汁叉烧',
+        '脆皮烧肉',
+        '上汤焗龙虾',
+        '鲍汁扣辽参',
+        '菜胆炖鱼翅',
+        '白灼象拔蚌',
+        '椰汁冰糖燕窝',
+        '麒麟鲈鱼',
+        '椒盐濑尿虾',
+        '蒜香骨',
+        '白灼虾',
+        '干炒牛河',
+        '广东早茶',
+        '老火靓汤',
+        '罗汉斋',
+        '广式烧填鸭',
+        '豉汁蒸排骨',
+        '菠萝咕噜肉',
+        '玫瑰豉油鸡',
+        '萝卜牛腩煲',
+        '潮州牛肉丸',
+        '潮汕鱼丸',
+        '生菜龙虾',
+        '鸳鸯膏蟹',
+        '潮州打冷',
+        '卤鹅肝',
+        '蚝烙',
+        '芙蓉虾',
+        '沙茶牛肉',
+        '客家酿豆腐',
+        '梅菜扣肉',
+        '盐焗鸡',
+        '猪肚包鸡',
+        '盆菜',
+      ]
+      let timer = null
+      $btn.addEventListener('click', event => {
+        if (event.target.innerHTML === '开始') {
+          event.target.innerHTML = '停止'
+          timer = setInterval(() => {
+            $title.innerHTML =
+              '今天吃' + arr[Math.floor(Math.random() * arr.length)]
+          }, 50)
+        } else {
+          event.target.innerHTML = '开始'
+          clearInterval(timer)
+        }
+      })
+    </script>
+  </body>
+</html>
